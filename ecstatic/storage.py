@@ -11,6 +11,7 @@ import os
 import types
 from .manifests import staticfiles_manifest
 from .utils import get_hashed_filename, split_filename
+from urlparse import urlparse
 
 
 @contextmanager
@@ -166,3 +167,9 @@ class StaticManifestMixin(object):
             return super(StaticManifestMixin, self).url(name, force)
 
         return staticfiles_manifest.get(name)
+
+    def exists(self, name):
+        storage_name = urlparse(self.url(name)).path.lstrip('/')
+        return super(StaticManifestMixin, self).exists(storage_name)
+
+
